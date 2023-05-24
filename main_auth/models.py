@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 from .managers import CustomUserManager
 from django.utils import timezone
+import uuid
 # Create your models here.
 
 
@@ -13,6 +14,9 @@ class Role(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        db_table = 'role'
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
@@ -25,9 +29,20 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ["role_id"]
 
     objects = CustomUserManager()
 
     def __str__(self):
         return self.email
+
+
+class Nation(models.Model):
+    id = models.SmallAutoField(primary_key=True)
+    name = models.CharField(max_length=15)
+
+
+class Person(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=15)
+    last_name = models.CharField(max_length=15)

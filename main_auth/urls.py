@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import index
+from .views import index, RegisterUserSerializer
 urlpatterns = [
-    path('', index)
+    path('', index),
+    path('register', RegisterUserSerializer.as_view())
 ]
